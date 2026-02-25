@@ -1,0 +1,577 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>동경에서 김집사 찾기: 비전트립 가이드</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700&family=Noto+Serif+KR:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        /* Base Styles */
+        body {
+            font-family: 'Noto Sans KR', sans-serif;
+            background-color: #fdfbf7; /* Warm off-white */
+            color: #2d3748;
+            scroll-behavior: smooth;
+        }
+        h1, h2, h3, .serif {
+            font-family: 'Noto Serif KR', serif;
+        }
+        
+        /* Chart Container Styling - Mandatory Constraint */
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 600px; /* Max width to prevent excessive stretching */
+            margin-left: auto;
+            margin-right: auto;
+            height: 300px; /* Base height */
+            max-height: 400px;
+        }
+        
+        @media (min-width: 768px) {
+            .chart-container {
+                height: 350px;
+            }
+        }
+
+        /* Custom Utilities */
+        .card-shadow {
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
+            transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+        }
+        .card-shadow:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.05), 0 4px 6px -2px rgba(0, 0, 0, 0.025);
+        }
+        .active-tab {
+            border-bottom: 2px solid #3182ce;
+            color: #2b6cb0;
+            font-weight: 600;
+        }
+        .timeline-line {
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 2px;
+            height: 100%;
+            background-color: #cbd5e0;
+            z-index: 0;
+        }
+        @media (max-width: 768px) {
+            .timeline-line {
+                left: 1rem;
+            }
+        }
+    </style>
+</head>
+<body class="antialiased">
+
+    <!-- Navigation -->
+    <nav class="sticky top-0 z-50 bg-white/90 backdrop-blur-sm border-b border-gray-200 shadow-sm">
+        <div class="max-w-6xl mx-auto px-4">
+            <div class="flex justify-between items-center h-16">
+                <div class="flex items-center">
+                    <span class="text-xl font-bold text-indigo-700 serif">동경에서 김집사 찾기</span>
+                </div>
+                <div class="hidden md:flex space-x-8 text-sm font-medium text-gray-600">
+                    <button onclick="scrollToSection('intro')" class="hover:text-indigo-600 transition">관점(Lens)</button>
+                    <button onclick="scrollToSection('geography')" class="hover:text-indigo-600 transition">지리</button>
+                    <button onclick="scrollToSection('history')" class="hover:text-indigo-600 transition">역사</button>
+                    <button onclick="scrollToSection('faith')" class="hover:text-indigo-600 transition">신앙</button>
+                    <button onclick="scrollToSection('itinerary')" class="hover:text-indigo-600 transition">일정</button>
+                </div>
+                <!-- Mobile Menu Button -->
+                <div class="md:hidden">
+                    <button id="mobile-menu-btn" class="text-gray-600 focus:outline-none">
+                        <span class="text-2xl">☰</span>
+                    </button>
+                </div>
+            </div>
+            <!-- Mobile Menu -->
+            <div id="mobile-menu" class="hidden md:hidden pb-4">
+                <div class="flex flex-col space-y-2">
+                    <button onclick="scrollToSection('intro')" class="block px-3 py-2 text-base font-medium hover:bg-indigo-50 rounded-md">관점(Lens)</button>
+                    <button onclick="scrollToSection('geography')" class="block px-3 py-2 text-base font-medium hover:bg-indigo-50 rounded-md">지리</button>
+                    <button onclick="scrollToSection('history')" class="block px-3 py-2 text-base font-medium hover:bg-indigo-50 rounded-md">역사</button>
+                    <button onclick="scrollToSection('faith')" class="block px-3 py-2 text-base font-medium hover:bg-indigo-50 rounded-md">신앙</button>
+                    <button onclick="scrollToSection('itinerary')" class="block px-3 py-2 text-base font-medium hover:bg-indigo-50 rounded-md">일정</button>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="max-w-4xl mx-auto px-4 py-8 space-y-20">
+
+        <!-- Hero Section -->
+        <section id="intro" class="text-center pt-10 pb-6">
+            <div class="inline-block p-2 rounded-full bg-indigo-100 mb-4">
+                <span class="text-indigo-700 text-xs font-bold tracking-wider uppercase px-2">Vision Trip Guide</span>
+            </div>
+            <h1 class="text-4xl md:text-5xl font-bold text-gray-900 mb-6 leading-tight">
+                신앙과 역사를 찾아 떠나는<br>
+                <span class="text-indigo-600">일본 비전트립</span>
+            </h1>
+            <p class="text-lg text-gray-600 max-w-2xl mx-auto mb-10 leading-relaxed">
+                "이 나라는 어떤 나라인가? 하나님은 이 땅을 어떻게 사랑하셨는가?"<br>
+                과거의 아픔을 넘어, 새로운 시선으로 일본을 바라보는 여정을 시작합니다.
+            </p>
+            
+            <!-- Lens Interaction -->
+            <div class="bg-white rounded-2xl shadow-lg p-6 max-w-2xl mx-auto border border-gray-100">
+                <h3 class="text-xl font-bold mb-4 serif">어떤 렌즈로 볼 행것인가?</h3>
+                <div class="flex justify-center space-x-4 mb-6">
+                    <button id="lens-negative-btn" class="px-6 py-2 rounded-full bg-gray-200 text-gray-600 hover:bg-gray-300 transition font-medium focus:outline-none active-lens-btn" onclick="toggleLens('negative')">부정적인 렌즈</button>
+                    <button id="lens-god-btn" class="px-6 py-2 rounded-full bg-indigo-100 text-indigo-700 hover:bg-indigo-200 transition font-medium focus:outline-none" onclick="toggleLens('god')">하나님의 렌즈</button>
+                </div>
+                <div id="lens-content" class="bg-gray-50 rounded-xl p-6 min-h-[140px] flex items-center justify-center transition-all duration-300">
+                    <p class="text-gray-700 text-center text-lg italic">
+                        "쇠말뚝, 석굴암 훼손... 생각만 해도 화가 나고 미운 마음이 듭니다.<br>
+                        과거의 잘못을 잊을 수 없습니다."
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Geography Section -->
+        <section id="geography" class="scroll-mt-24">
+            <div class="border-l-4 border-indigo-500 pl-4 mb-6">
+                <h2 class="text-3xl font-bold text-gray-900">1. 일본의 기초 지식</h2>
+                <p class="text-gray-500 mt-1">우리가 몰랐던 일본의 규모와 지리</p>
+            </div>
+            
+            <p class="text-gray-700 mb-8 leading-relaxed">
+                일본은 생각보다 큰 나라입니다. 4개의 큰 섬(홋카이도, 혼슈, 시코쿠, 큐슈)으로 이루어져 있으며, 남한 면적의 약 3.7배에 달합니다. 관서(오사카, 교토)에서 관동(도쿄)으로 중심지가 이동한 역사를 이해하는 것이 중요합니다.
+            </p>
+
+            <div class="grid md:grid-cols-2 gap-8 items-start">
+                <!-- Map Placeholder Concept -->
+                <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
+                    <h3 class="font-bold text-lg mb-4 text-center">주요 4개 섬</h3>
+                    <div class="grid grid-cols-2 gap-4">
+                        <div class="bg-blue-50 p-4 rounded-lg text-center">
+                            <span class="block text-2xl mb-2">🏔️</span>
+                            <h4 class="font-bold text-gray-800">홋카이도</h4>
+                            <p class="text-xs text-gray-500">가장 북쪽<br>남한의 80% 크기</p>
+                        </div>
+                        <div class="bg-green-50 p-4 rounded-lg text-center">
+                            <span class="block text-2xl mb-2">🗾</span>
+                            <h4 class="font-bold text-gray-800">혼슈</h4>
+                            <p class="text-xs text-gray-500">가장 큰 본섬<br>도쿄, 오사카 위치</p>
+                        </div>
+                        <div class="bg-yellow-50 p-4 rounded-lg text-center">
+                            <span class="block text-2xl mb-2">🌊</span>
+                            <h4 class="font-bold text-gray-800">시코쿠</h4>
+                            <p class="text-xs text-gray-500">가장 작은 섬</p>
+                        </div>
+                        <div class="bg-red-50 p-4 rounded-lg text-center">
+                            <span class="block text-2xl mb-2">🌋</span>
+                            <h4 class="font-bold text-gray-800">큐슈</h4>
+                            <p class="text-xs text-gray-500">가장 남쪽<br>한국과 근접</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Comparison Chart -->
+                <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
+                    <h3 class="font-bold text-lg mb-2 text-center">한일 규모 비교</h3>
+                    <div class="chart-container">
+                        <canvas id="comparisonChart"></canvas>
+                    </div>
+                    <p class="text-xs text-center text-gray-400 mt-2">* 데이터: 대략적 수치 비교</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- History Section -->
+        <section id="history" class="scroll-mt-24">
+            <div class="border-l-4 border-indigo-500 pl-4 mb-6">
+                <h2 class="text-3xl font-bold text-gray-900">2. 역사의 흐름</h2>
+                <p class="text-gray-500 mt-1">고대부터 근대까지, 일본 역사의 주요 변곡점</p>
+            </div>
+
+            <!-- Vertical Timeline -->
+            <div class="relative py-8 px-2">
+                <div class="timeline-line"></div>
+                
+                <!-- Era 1 -->
+                <div class="relative mb-12">
+                    <div class="flex items-center md:justify-center mb-2">
+                        <div class="absolute left-4 md:left-1/2 md:-translate-x-1/2 w-4 h-4 bg-indigo-500 rounded-full border-4 border-white shadow z-10"></div>
+                        <div class="ml-12 md:ml-0 px-4 py-1 bg-indigo-100 text-indigo-800 rounded-full text-sm font-bold z-10">고대 및 중세</div>
+                    </div>
+                    <div class="ml-12 md:grid md:grid-cols-2 md:gap-8 md:ml-0">
+                        <div class="md:text-right pr-4">
+                            <h4 class="font-bold text-gray-800">아스카 & 나라 시대</h4>
+                            <p class="text-sm text-gray-600">불교 전래(백제), 쇼토쿠 태자, '일본' 국호 사용, 계획도시 건설</p>
+                        </div>
+                        <div class="hidden md:block"></div>
+                    </div>
+                </div>
+
+                <!-- Era 2 -->
+                <div class="relative mb-12">
+                    <div class="flex items-center md:justify-center mb-2">
+                        <div class="absolute left-4 md:left-1/2 md:-translate-x-1/2 w-4 h-4 bg-indigo-500 rounded-full border-4 border-white shadow z-10"></div>
+                        <div class="ml-12 md:ml-0 px-4 py-1 bg-indigo-100 text-indigo-800 rounded-full text-sm font-bold z-10">막부 시대</div>
+                    </div>
+                    <div class="ml-12 md:grid md:grid-cols-2 md:gap-8 md:ml-0">
+                        <div class="hidden md:block"></div>
+                        <div class="pl-4">
+                            <h4 class="font-bold text-gray-800">무사 정권의 등장</h4>
+                            <p class="text-sm text-gray-600">가마쿠라 막부(카미카제), 전국 시대(하극상), 에도 막부(평화와 쇄국)</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Three Heroes Interactive -->
+                <div class="relative mb-12 bg-white p-6 rounded-xl shadow-md border border-gray-100 z-10 max-w-2xl mx-auto">
+                    <h3 class="text-center font-bold text-lg mb-4 text-gray-800">⚔️ 전국시대 3명의 영웅 이야기</h3>
+                    <p class="text-center text-sm text-gray-500 mb-6">"새가 울지 않으면 어떻게 할 것인가?"</p>
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                        <div onclick="showHero('oda')" class="cursor-pointer bg-red-50 hover:bg-red-100 p-4 rounded-lg text-center transition">
+                            <div class="text-2xl mb-2">🗡️</div>
+                            <div class="font-bold text-sm">오다 노부나가</div>
+                            <div class="text-xs text-gray-500 mt-1">클릭해서 보기</div>
+                        </div>
+                        <div onclick="showHero('toyotomi')" class="cursor-pointer bg-yellow-50 hover:bg-yellow-100 p-4 rounded-lg text-center transition">
+                            <div class="text-2xl mb-2">💡</div>
+                            <div class="font-bold text-sm">도요토미 히데요시</div>
+                            <div class="text-xs text-gray-500 mt-1">클릭해서 보기</div>
+                        </div>
+                        <div onclick="showHero('tokugawa')" class="cursor-pointer bg-blue-50 hover:bg-blue-100 p-4 rounded-lg text-center transition">
+                            <div class="text-2xl mb-2">🐢</div>
+                            <div class="font-bold text-sm">도쿠가와 이에야스</div>
+                            <div class="text-xs text-gray-500 mt-1">클릭해서 보기</div>
+                        </div>
+                    </div>
+                    <div id="hero-quote" class="mt-6 p-4 bg-gray-50 rounded-lg text-center border-l-4 border-gray-300 min-h-[80px] flex items-center justify-center">
+                        <p class="text-gray-600 italic text-sm">영웅을 선택하여 그들의 성격을 확인해보세요.</p>
+                    </div>
+                </div>
+
+                <!-- Era 3 -->
+                <div class="relative">
+                    <div class="flex items-center md:justify-center mb-2">
+                        <div class="absolute left-4 md:left-1/2 md:-translate-x-1/2 w-4 h-4 bg-indigo-500 rounded-full border-4 border-white shadow z-10"></div>
+                        <div class="ml-12 md:ml-0 px-4 py-1 bg-indigo-100 text-indigo-800 rounded-full text-sm font-bold z-10">근대</div>
+                    </div>
+                    <div class="ml-12 md:grid md:grid-cols-2 md:gap-8 md:ml-0">
+                        <div class="md:text-right pr-4">
+                            <h4 class="font-bold text-gray-800">메이지 유신 (1868)</h4>
+                            <p class="text-sm text-gray-600">천황 중심 근대 국가 건설, 서구화 박차, 제국주의로의 변모</p>
+                        </div>
+                        <div class="hidden md:block"></div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Faith Section -->
+        <section id="faith" class="scroll-mt-24">
+            <div class="border-l-4 border-indigo-500 pl-4 mb-6">
+                <h2 class="text-3xl font-bold text-gray-900">3. 일본의 기독교</h2>
+                <p class="text-gray-500 mt-1">박해를 넘어 싹튼 신앙의 씨앗들</p>
+            </div>
+
+            <div class="bg-indigo-50 rounded-xl p-6 mb-8">
+                <h3 class="font-bold text-indigo-900 mb-2 flex items-center">
+                    <span class="mr-2">✝️</span> 박해와 인내의 역사
+                </h3>
+                <p class="text-indigo-800 text-sm leading-relaxed mb-4">
+                    에도 막부의 '후미에'(예수상 밟기) 등 잔혹한 박해 속에서도 '카쿠레 키리시탄'들은 신앙을 지켰습니다. 메이지 시대 개항과 함께 복음은 다시 들어왔습니다.
+                </p>
+            </div>
+
+            <div class="grid md:grid-cols-3 gap-6">
+                <!-- Person 1 -->
+                <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-100 card-shadow text-center">
+                    <div class="w-16 h-16 bg-gray-200 rounded-full mx-auto mb-4 flex items-center justify-center text-2xl">🎓</div>
+                    <h4 class="font-bold text-lg">윌리엄 클라크</h4>
+                    <p class="text-indigo-600 text-sm font-medium mb-2">삿포로 농학교 교장</p>
+                    <p class="text-gray-500 text-xs italic">"Boys, be ambitious!"<br>(청년들이여, 야망을 가져라!)</p>
+                </div>
+
+                <!-- Person 2 -->
+                <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-100 card-shadow text-center">
+                    <div class="w-16 h-16 bg-gray-200 rounded-full mx-auto mb-4 flex items-center justify-center text-2xl">📖</div>
+                    <h4 class="font-bold text-lg">우치무라 간조</h4>
+                    <p class="text-indigo-600 text-sm font-medium mb-2">기독교 사상가</p>
+                    <p class="text-gray-500 text-xs italic">무교회주의 창시자<br>일본의 대표적 지성인</p>
+                </div>
+
+                <!-- Person 3 -->
+                <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-100 card-shadow text-center">
+                    <div class="w-16 h-16 bg-gray-200 rounded-full mx-auto mb-4 flex items-center justify-center text-2xl">🇰🇷</div>
+                    <h4 class="font-bold text-lg">이수정</h4>
+                    <p class="text-indigo-600 text-sm font-medium mb-2">한국 선교의 수문장</p>
+                    <p class="text-gray-500 text-xs italic">일본에서 세례 후<br>마가복음 한글 번역</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Itinerary Section -->
+        <section id="itinerary" class="scroll-mt-24">
+            <div class="border-l-4 border-indigo-500 pl-4 mb-6">
+                <h2 class="text-3xl font-bold text-gray-900">4. 비전트립 일정</h2>
+                <p class="text-gray-500 mt-1">4일간의 동경 여정 미리보기</p>
+            </div>
+
+            <div class="bg-white rounded-xl shadow-lg overflow-hidden border border-gray-200">
+                <!-- Tabs -->
+                <div class="flex border-b border-gray-200 overflow-x-auto">
+                    <button onclick="switchDay(1)" id="tab-day-1" class="flex-1 py-4 px-6 text-center font-bold text-gray-500 hover:text-indigo-600 focus:outline-none transition active-tab whitespace-nowrap">Day 1: 도쿄 Core</button>
+                    <button onclick="switchDay(2)" id="tab-day-2" class="flex-1 py-4 px-6 text-center font-bold text-gray-500 hover:text-indigo-600 focus:outline-none transition whitespace-nowrap">Day 2: 요코하마</button>
+                    <button onclick="switchDay(3)" id="tab-day-3" class="flex-1 py-4 px-6 text-center font-bold text-gray-500 hover:text-indigo-600 focus:outline-none transition whitespace-nowrap">Day 3: City Tour</button>
+                    <button onclick="switchDay(4)" id="tab-day-4" class="flex-1 py-4 px-6 text-center font-bold text-gray-500 hover:text-indigo-600 focus:outline-none transition whitespace-nowrap">Day 4: Tradition</button>
+                </div>
+
+                <!-- Content Area -->
+                <div class="p-6 md:p-8 bg-gray-50 min-h-[300px]">
+                    <div id="content-day-1" class="day-content">
+                        <div class="flex items-start space-x-4 mb-6">
+                            <div class="bg-indigo-600 text-white rounded-lg p-3 text-2xl">🏙️</div>
+                            <div>
+                                <h3 class="text-xl font-bold text-gray-900">도쿄의 심장부 탐방</h3>
+                                <p class="text-indigo-600 font-medium">우에노 공원 → 도쿄역 → 고교(황궁)</p>
+                            </div>
+                        </div>
+                        <p class="text-gray-700 leading-relaxed">
+                            일본의 근대화가 시작된 도쿄역과 일본 천황이 거주하는 황궁(고교)을 방문하며 일본의 중심을 이해하는 시간입니다. 우에노 공원은 일본 최초의 공원으로 문화적 의미가 깊습니다.
+                        </p>
+                    </div>
+                    <div id="content-day-2" class="day-content hidden">
+                        <div class="flex items-start space-x-4 mb-6">
+                            <div class="bg-indigo-600 text-white rounded-lg p-3 text-2xl">⚓</div>
+                            <div>
+                                <h3 class="text-xl font-bold text-gray-900">개항의 발자취, 요코하마</h3>
+                                <p class="text-indigo-600 font-medium">시로교회 → 카이간교회 → 성불사 → 메구로</p>
+                            </div>
+                        </div>
+                        <p class="text-gray-700 leading-relaxed">
+                            일본 최초의 개항지인 요코하마에서 초기 기독교의 흔적을 찾습니다. 이수정 선교사가 세례를 받은 곳과 초기 교회들을 방문하며 믿음의 선배들의 발자취를 따라갑니다.
+                        </p>
+                    </div>
+                    <div id="content-day-3" class="day-content hidden">
+                        <div class="flex items-start space-x-4 mb-6">
+                            <div class="bg-indigo-600 text-white rounded-lg p-3 text-2xl">🗼</div>
+                            <div>
+                                <h3 class="text-xl font-bold text-gray-900">도쿄 시티 투어</h3>
+                                <p class="text-indigo-600 font-medium">츠키지 → 히비야 공원 → 긴자 → 오모테산도 → 시부야</p>
+                            </div>
+                        </div>
+                        <p class="text-gray-700 leading-relaxed">
+                            일본의 현대 문화와 번화가를 탐방합니다. 긴자의 화려함과 시부야의 젊음을 느끼며, 현대 일본인들의 삶과 문화를 관찰하고 기도하는 시간을 갖습니다.
+                        </p>
+                    </div>
+                    <div id="content-day-4" class="day-content hidden">
+                        <div class="flex items-start space-x-4 mb-6">
+                            <div class="bg-indigo-600 text-white rounded-lg p-3 text-2xl">🏮</div>
+                            <div>
+                                <h3 class="text-xl font-bold text-gray-900">Hip Tradition & 귀국</h3>
+                                <p class="text-indigo-600 font-medium">아사쿠사 → 우에노 → 나리타 공항</p>
+                            </div>
+                        </div>
+                        <p class="text-gray-700 leading-relaxed">
+                            가장 일본다운 정취를 느낄 수 있는 아사쿠사 센소지를 방문합니다. 전통과 현대가 공존하는 모습을 보며 여행을 마무리하고 공항으로 이동합니다.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Footer / Q&A -->
+        <footer class="bg-gray-800 text-white rounded-2xl p-8 md:p-12 text-center">
+            <h3 class="text-2xl font-bold mb-6 serif">Q. 일본은 정말 나쁜 나라인가요?</h3>
+            <div class="bg-gray-700 p-6 rounded-xl max-w-2xl mx-auto mb-8">
+                <p class="text-gray-300 leading-relaxed italic">
+                    "과거의 잘못은 분명히 기억해야 합니다. 하지만 동시에 그 땅의 사람들을 긍휼히 여기시는 하나님의 마음을 품는 것이 기독교인의 자세입니다. 이번 여행은 <strong>'김집사(우리가 찾아야 할 영혼)'</strong>를 찾는 여행임을 잊지 맙시다!"
+                </p>
+            </div>
+            <p class="text-gray-500 text-sm">높은뜻하늘교회 비전트립 가이드북</p>
+        </footer>
+
+    </main>
+
+    <!-- Scripts -->
+    <script>
+        // 1. Navigation Scroll Logic
+        function scrollToSection(id) {
+            const element = document.getElementById(id);
+            if (element) {
+                const navHeight = 80; // Approximate height of sticky nav + padding
+                const elementPosition = element.getBoundingClientRect().top + window.pageYOffset;
+                window.scrollTo({
+                    top: elementPosition - navHeight,
+                    behavior: 'smooth'
+                });
+            }
+            // Close mobile menu if open
+            document.getElementById('mobile-menu').classList.add('hidden');
+        }
+
+        // Mobile Menu Toggle
+        document.getElementById('mobile-menu-btn').addEventListener('click', function() {
+            const menu = document.getElementById('mobile-menu');
+            menu.classList.toggle('hidden');
+        });
+
+        // 2. Lens Interaction Logic
+        function toggleLens(lensType) {
+            const contentDiv = document.getElementById('lens-content');
+            const pTag = contentDiv.querySelector('p');
+            const negBtn = document.getElementById('lens-negative-btn');
+            const godBtn = document.getElementById('lens-god-btn');
+
+            if (lensType === 'negative') {
+                pTag.innerHTML = `"쇠말뚝, 석굴암 훼손... 생각만 해도 화가 나고 미운 마음이 듭니다.<br>과거의 잘못을 잊을 수 없습니다."`;
+                contentDiv.classList.remove('bg-indigo-50', 'border-indigo-100');
+                contentDiv.classList.add('bg-gray-50');
+                
+                negBtn.classList.add('bg-gray-300', 'font-bold');
+                negBtn.classList.remove('bg-gray-200');
+                godBtn.classList.remove('bg-indigo-200', 'font-bold');
+                godBtn.classList.add('bg-indigo-100');
+            } else {
+                pTag.innerHTML = `"이 나라는 어떤 나라인가? 하나님은 이 땅을 어떻게 사랑하셨는가?<br><strong>미움 대신 긍휼의 마음으로</strong> 그 땅을 바라봅니다."`;
+                contentDiv.classList.remove('bg-gray-50');
+                contentDiv.classList.add('bg-indigo-50', 'border', 'border-indigo-100');
+                
+                godBtn.classList.add('bg-indigo-200', 'font-bold');
+                godBtn.classList.remove('bg-indigo-100');
+                negBtn.classList.remove('bg-gray-300', 'font-bold');
+                negBtn.classList.add('bg-gray-200');
+            }
+        }
+
+        // 3. Hero Quote Logic
+        const heroQuotes = {
+            oda: {
+                title: "오다 노부나가 (결단력)",
+                quote: "\"울지 않는 새는 죽여버려라.\"",
+                desc: "불같은 성격, 기존 체제 파괴, 조총 도입, 서구 문물 개방."
+            },
+            toyotomi: {
+                title: "도요토미 히데요시 (지략)",
+                quote: "\"울지 않는 새는 울게 만들어라.\"",
+                desc: "꾀가 많음, 전국 통일 달성, 임진왜란을 일으킨 장본인."
+            },
+            tokugawa: {
+                title: "도쿠가와 이에야스 (인내)",
+                quote: "\"울지 않는 새는 울 때까지 기다려라.\"",
+                desc: "끈기와 인내, 에도 막부 창시, 250년 평화의 기틀 마련."
+            }
+        };
+
+        function showHero(hero) {
+            const quoteBox = document.getElementById('hero-quote');
+            const data = heroQuotes[hero];
+            
+            // Add fade animation effect
+            quoteBox.style.opacity = '0';
+            setTimeout(() => {
+                quoteBox.innerHTML = `
+                    <h5 class="font-bold text-gray-800 text-lg mb-1">${data.title}</h5>
+                    <p class="text-indigo-600 font-serif text-xl italic mb-2">${data.quote}</p>
+                    <p class="text-sm text-gray-500">${data.desc}</p>
+                `;
+                quoteBox.className = "mt-6 p-4 rounded-lg text-center border-l-4 min-h-[80px] flex flex-col items-center justify-center transition-all duration-300";
+                
+                if(hero === 'oda') quoteBox.classList.add('bg-red-50', 'border-red-400');
+                else if(hero === 'toyotomi') quoteBox.classList.add('bg-yellow-50', 'border-yellow-400');
+                else quoteBox.classList.add('bg-blue-50', 'border-blue-400');
+
+                quoteBox.style.opacity = '1';
+            }, 200);
+        }
+
+        // 4. Tab Switching Logic
+        function switchDay(day) {
+            // Update Tab Styles
+            for(let i=1; i<=4; i++) {
+                const tab = document.getElementById(`tab-day-${i}`);
+                const content = document.getElementById(`content-day-${i}`);
+                
+                if(i === day) {
+                    tab.classList.add('active-tab', 'text-indigo-600');
+                    tab.classList.remove('text-gray-500');
+                    content.classList.remove('hidden');
+                } else {
+                    tab.classList.remove('active-tab', 'text-indigo-600');
+                    tab.classList.add('text-gray-500');
+                    content.classList.add('hidden');
+                }
+            }
+        }
+
+        // 5. Chart Initialization
+        document.addEventListener('DOMContentLoaded', function() {
+            const ctx = document.getElementById('comparisonChart').getContext('2d');
+            
+            new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: ['면적 (만 km²)', '인구 (만 명)'],
+                    datasets: [
+                        {
+                            label: '한국 (South Korea)',
+                            data: [10, 5100], // Approx data
+                            backgroundColor: 'rgba(59, 130, 246, 0.6)', // Blue
+                            borderColor: 'rgba(59, 130, 246, 1)',
+                            borderWidth: 1
+                        },
+                        {
+                            label: '일본 (Japan)',
+                            data: [37.8, 12500], // Approx data
+                            backgroundColor: 'rgba(239, 68, 68, 0.6)', // Red
+                            borderColor: 'rgba(239, 68, 68, 1)',
+                            borderWidth: 1
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            grid: {
+                                display: true,
+                                drawBorder: false
+                            }
+                        },
+                        x: {
+                            grid: {
+                                display: false
+                            }
+                        }
+                    },
+                    plugins: {
+                        legend: {
+                            position: 'bottom'
+                        },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    let label = context.dataset.label || '';
+                                    if (label) {
+                                        label += ': ';
+                                    }
+                                    if (context.parsed.y !== null) {
+                                        label += context.parsed.y;
+                                        if(context.label === '면적 (만 km²)') label += '만 km²';
+                                        else label += '만 명';
+                                    }
+                                    return label;
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+        });
+    </script>
+</body>
+</html>
